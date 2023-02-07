@@ -1,0 +1,17 @@
+---
+- hosts: all
+  gather_facts: yes
+  tasks:
+  - name: Run 1Password CLI install on Ubuntu
+    import_tasks:
+      file: install_ubuntu.yml
+    when: ansible_facts['distribution'] == "Ubuntu"
+  - name: Run 1Password CLI install on macOS
+    import_tasks:
+      file: install_mac.yml
+    when: ansible_facts['distribution'] == "MacOSX"
+  - name: Get 1Password CLI Version
+    command: op --version
+    register: op_version
+  - debug:
+      var: op_version.stdout_lines
